@@ -17,7 +17,7 @@ except AttributeError:
 else:
     ssl._create_default_https_context = _create_unverified_https_context
 
-nltk.download()
+#nltk.download()
 def redact_names(n_lines, input_files):
     sensitive_names = []
     redated_names = []
@@ -33,7 +33,7 @@ def redact_names(n_lines, input_files):
         for name in sensitive_names_final:
             line = line.replace(name, '█' * len(name))
         redated_names.append(line)
-        redacted_names_stats.append([input_files, len(sensitive_names_final)])
+        redacted_names_stats.append([input_files.split('/')[-1], len(sensitive_names_final)])
     return redated_names, redacted_names_stats
 
 def redact_dates(d_lines, input_files):
@@ -50,7 +50,7 @@ def redact_dates(d_lines, input_files):
             except Exception:
                 None
         redacted_dates.append(line)
-        redacted_dates_stats.append([input_files, len(dates_final)])
+        redacted_dates_stats.append([input_files.split('/')[-1], len(dates_final)])
     return redacted_dates, redacted_dates_stats
 
 def redact_phones(p_lines, input_files):
@@ -68,12 +68,13 @@ def redact_phones(p_lines, input_files):
             except Exception:
                 None
         redacted_phones.append(line)
-        redacted_phones_stats.append([input_files, len(phones_final)])
+        redacted_phones_stats.append([input_files.split('/')[-1], len(phones_final)])
     return redacted_phones, redacted_phones_stats
 
 def redact_genders(g_lines, input_files):
     genders = []
     redacted_genders = []
+    redacted_genders_stats = []
     category = ['male', 'boy', 'guy', 'man', 'he', 'him', 'son', 'his', 'men', 'female', 'girl', 'lady', 'woman', 'daughter', 'women', 'she', 'hers', 'her']
     for line in g_lines:
         for l in line.split("\n"):
@@ -87,7 +88,7 @@ def redact_genders(g_lines, input_files):
             except Exception:
                 None
         redacted_genders.append(line)
-        redacted_phones_stats.append([input_files, len(genders_final)])
+        redacted_genders_stats.append([input_files.split('/')[-1], len(genders_final)])
     return redacted_genders, redacted_genders_stats
 
 def redact_concept(c_lines, input_files, concept):
@@ -110,7 +111,14 @@ def redact_concept(c_lines, input_files, concept):
         redacted_sentences.append(line)
     return redacted_sentences
 
-
+def write_output(output_dir, file, docs):
+    import os
+    if not os.path.exists(output_dir):
+        os.mkdir(output_dir)
+    output_file = output_dir + '/' + file.split('/')[-1].split('.')[0] + '.redacted'
+    with open(output_file, 'w', encoding = 'UTF-8') as fout:
+        fout.truncate()
+        fout.write(",".join(docs))
 
 
 
@@ -123,20 +131,18 @@ if __name__ == '__main__':
     parser.add_argument("--dates", required=False, help="indicator to redact dates", action='store_true')
     parser.add_argument("--phones", required=False, help="indicator to redact phones", action='store_true')
     parser.add_argument("--genders", required=False, help="indicator to redact genders ", action='store_true')
-    parser.add_argument("--concept", type=str, required=False, help="redact sentence by concept. It can be passed multiple times")
-
-    # parser.add_argument("--stats", type=str, required=False, help="Gives statistics for redacted files")
-    # parser.add_argument("--concept", type=str, required=False, help="Concept word removal")
-    # parser.add_argument("--output", type=str, required=True, help="Output File location")
+    parser.add_argument("--concept", type=str, required=False, help="Redact a full sentence by a concept type")
+    parser.add_argument("--output", type=str, required=True, help="redacted files output directory name")
+    parser.add_argument("--stats", type=str, required=False, help="generate stats for redaction process with stats location")
 
     args = parser.parse_args()
     input_files = glob.glob(args.input[0][0])
-    redacted_names_stats = []
-    redacted_dates_stats = []
-    redacted_phones_stats = []
-    redacted_genders_stats = []
     for file in input_files:
         redacted_lines = []
+        redacted_names_stats = []
+        redacted_dates_stats = []
+        redacted_phones_stats = []
+
         lines = []
         with open(file, 'r', encoding='UTF-8') as fin:
             lines.append(fin.read())
@@ -165,5 +171,25 @@ if __name__ == '__main__':
                 redacted_lines = redact_concept(lines, file, args.concept)
             else:
                 redacted_lines = redact_concept(redacted_lines, file, args.concept)
-        print(redacted_lines)
+        if args.output:
+            write_output(args.output, file, redacted_lines)
+
+        if args.stats:
+            import os
+            import csv
+            if not os.path.exists(args.stats):
+                os.mkdir(args.stats)
+            output_stats_file = args.stats + '/' + file.split('/')[-1].split('.')[0] + '.stats'
+            with open(output_stats_file, 'w', encoding='utf-8') as fout:
+                fout.truncate()
+                writer = csv.writer(fout, delimiter='-', quoting=csv.QUOTE_NONE)
+                fout.write('Total number of names redacted in the file \n')
+                writer.writerows(redacted_names_stats)
+                fout.write('Total number of gender identifiers redacted in the file \n')
+                writer.writerows(redacted_genders_stats)
+                fout.write('Total number of phone numbers redacted in the file \n')
+                writer.writerows(redacted_phones_stats)
+                fout.write('Total number of dates redacted in the file \n')
+                writer.writerows(redacted_dates_stats)
+
 

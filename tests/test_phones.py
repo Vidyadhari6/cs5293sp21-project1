@@ -1,5 +1,5 @@
 from project1 import redactor
-def test_redact_names():
+def test_redact_phones():
     text = ['My kid name is Kevin. His birth date is 2021-09-09. His phone number is 989-859-4124.']
-    o_text, o_stats = redactor.redact_names(text, 'test.txt')
+    o_text, o_stats = redactor.redact_phones(text, 'test.txt')
     assert len(text) == len(o_text), "Names redaction process unsuccessful"
