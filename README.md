@@ -50,7 +50,7 @@
     3. git checkout tags/v1.0
     4. pip install pipenv
     5. pipenv install
-    6. pipenv run python3 project1/redactor.py --input 'project1/*.txt' --names --dates --phones --concept 'kids' --output 'files' --stats
+    6. pipenv run python3 project1/redactor.py --input 'project1/*.txt' --names --dates --phones --concept 'kids' --output 'files' --stats 'stats_out'
 
 
 Running unit test
