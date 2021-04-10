@@ -19,6 +19,7 @@ else:
 
 #nltk.download()
 def redact_names(n_lines, input_files):
+    redacted_names_stats = []
     sensitive_names = []
     redated_names = []
     for line in n_lines:
@@ -37,6 +38,7 @@ def redact_names(n_lines, input_files):
     return redated_names, redacted_names_stats
 
 def redact_dates(d_lines, input_files):
+    redacted_dates_stats = []
     dates = []
     redacted_dates = []
     for line in d_lines:
@@ -54,6 +56,7 @@ def redact_dates(d_lines, input_files):
     return redacted_dates, redacted_dates_stats
 
 def redact_phones(p_lines, input_files):
+    redacted_phones_stats = []
     import re
     pattern = r'(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})'
     phones = []
@@ -139,9 +142,6 @@ if __name__ == '__main__':
     input_files = glob.glob(args.input[0][0])
     for file in input_files:
         redacted_lines = []
-        redacted_names_stats = []
-        redacted_dates_stats = []
-        redacted_phones_stats = []
 
         lines = []
         with open(file, 'r', encoding='UTF-8') as fin:
