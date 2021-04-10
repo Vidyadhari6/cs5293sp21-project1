@@ -46,7 +46,7 @@
 ### Running code
     1. git clone git@github.com:Vidyadhari6/cs5293sp21-project1.git
     2. cd cs5293sp21-project1/
-    3. git checkout tags/v1.0
+    3. git checkout tags/v3.0
     4. pip install pipenv
     5. pipenv install
     6. pipenv run python3 project1/redactor.py --input 'project1/*.txt' --names --dates --phones --concept 'kids' --output 'files' --stats 'stats_out'
