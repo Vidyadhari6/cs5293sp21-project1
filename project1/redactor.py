@@ -142,7 +142,10 @@ if __name__ == '__main__':
     input_files = glob.glob(args.input[0][0])
     for file in input_files:
         redacted_lines = []
-
+        redacted_names_stats = []
+        redacted_genders_stats = []
+        redacted_phones_stats = []
+        redacted_dates_stats = []
         lines = []
         with open(file, 'r', encoding='UTF-8') as fin:
             lines.append(fin.read())
