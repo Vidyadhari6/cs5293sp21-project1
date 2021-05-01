@@ -10,6 +10,7 @@ pytest = "*"
 nltk = "*"
 dateparser = "~=1.0.0"
 python-dateutil = "*"
+sklearn = "*"
 
 [dev-packages]
 
