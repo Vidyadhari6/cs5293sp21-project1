@@ -27,6 +27,16 @@
 
     It takes the name of the directory, filename and the resultant text. It creates the directory with same name as the original file with the extension .redacted and stores the masked text in it.
 
+### find_entity(lines, file)
+
+    It takes the text of the file and filename as input and it will find  the words related to person names and creates required labels and features to train the model. This function will return a list of dictionaries
+    that will contain the name of a person as a label and word_count,name_length,doc_length,ratings as features.
+
+### test_entity(lines, file)
+
+    It takes the text of the file and filename as input and it will find  the masked person names and creates required  features to test the model. This function will return a list of dictionaries
+    that will contain  word_count,name_length,doc_length,ratings of masked person names as features.
+
 ### args = stats
 
     It returns total number of names redacted in the file, total number of gender identifiers redacted in the file, total number of phone numbers redacted in the file, total number of dates redacted in the file in an output file with same name as the original file with the extension .stats
@@ -43,14 +53,21 @@
         c. pipenv creates a Pipfile.lock file to maintain and lock python dependencies for that pipenv environment.
         d. To run a python process in pipenv virtual environment use **pipenv run** command.
 
-### Running code
+### Running redaction code
     1. git clone git@github.com:Vidyadhari6/cs5293sp21-project1.git
     2. cd cs5293sp21-project1/
     3. git checkout tags/v3.0
     4. pip install pipenv
     5. pipenv install
-    6. pipenv run python3 project1/redactor.py --input 'project1/*.txt' --names --dates --phones --concept 'kids' --output 'files' --stats 'stats_out'
+    6. pipenv run python3 project1/redactor.py --input 'project1/*.txt' --names --dates --phones --concept 'kids' --output 'files' --stats 'stats_out''
 
+### Running unredaction code
+    1. git clone git@github.com:Vidyadhari6/cs5293sp21-project1.git
+    2. cd cs5293sp21-project1/
+    3. git checkout tags/v4.0
+    4. pip install pipenv
+    5. pipenv install
+    6. pipenv run python3 project1/unredactor.py --train 'traindata/train/*.txt' --test 'testdata/test/0.txt' --output 'testdata/test/0.txt'
 
 ### Running unit test
     pipenv run pytest
