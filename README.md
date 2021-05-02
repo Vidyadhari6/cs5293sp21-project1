@@ -67,7 +67,7 @@
     3. git checkout tags/v4.0
     4. pip install pipenv
     5. pipenv install
-    6. pipenv run python3 project1/unredactor.py --train 'traindata/train/*.txt' --test 'testdata/test/0.txt' --output 'testdata/test/0.txt'
+    6. pipenv run python3 unredactor.py --train ~/git/cs5293sp21-project1/testdata/train/*.txt --test ~/git/cs5293sp21-project1/testdata/test/0_3.txt --output ~/git/cs5293sp21-project1/testdata/test/0_3.txt 
 
 ### Running unit test
     pipenv run pytest
