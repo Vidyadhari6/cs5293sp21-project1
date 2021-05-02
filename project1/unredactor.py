@@ -68,11 +68,10 @@ def write_output(output_dir, file, docs):
     import os
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)
-    output_file = output_dir + '/' + file.split('/')[-1].split('.')[0] + '.txt'
-    with open(output_file, 'w', encoding='UTF-8') as fout:
+    with open(output_dir, 'w', encoding='UTF-8') as fout:
         fout.truncate()
         fout.write(",".join(docs))
-    return output_file
+    return output_dir
 
 
 if __name__ == '__main__':
