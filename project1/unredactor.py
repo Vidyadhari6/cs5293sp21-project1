@@ -122,5 +122,5 @@ if __name__ == '__main__':
                 test_features.append(d)
             features_test = dict_vec.transform(test_features)
             label_pred = model.predict(features_test)
-            print("Predicted Names")
+            print("Below list contains the predicted names for a given test file")
             print(label_pred)
